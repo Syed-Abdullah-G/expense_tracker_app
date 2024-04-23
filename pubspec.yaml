@@ -37,6 +37,16 @@ dependencies:
   cupertino_icons: ^1.0.6
   uuid: ^4.3.3
   intl: ^0.19.0
+  external_path:
+  dio:
+  syncfusion_flutter_xlsio:
+  path_provider:
+  open_file:
+  permission_handler:
+  downloads_path_provider_28:
+  provider:
+  hive_flutter:
+  hive:
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +58,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  build_runner:
+  hive_generator:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
