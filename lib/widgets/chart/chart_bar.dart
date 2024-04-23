@@ -30,7 +30,10 @@ class ChartBar extends StatelessWidget {
     final showcaseAmountAfterConversion = showcaseAmountforPercentage * 100;
     final String showCasePercentageString =
         showcaseAmountAfterConversion.toStringAsFixed(2);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
     final isDarkMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Expanded(
@@ -54,6 +57,7 @@ class ChartBar extends StatelessWidget {
             ),
           ),
           Positioned.fill(
+<<<<<<< HEAD
               child: Center(
             child: Text(
               amount,
@@ -63,6 +67,18 @@ class ChartBar extends StatelessWidget {
                   fontWeight: FontWeight.w500),
             ),
           ))
+=======
+            child: Center(
+              child: Text(
+                '\$${amount} - ${showCasePercentageString}%',
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
         ]),
       ),
     );

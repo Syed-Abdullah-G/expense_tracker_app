@@ -10,9 +10,9 @@ enum Category { food, Bills, leisure, work }
 
 const categoryIcons = {
   Category.food: Icons.restaurant,
-  Category.Bills: Icons.fitness_center,
-  Category.leisure: Icons.movie,
-  Category.work: Icons.work,
+  Category.Bills: Icons.receipt_long,
+  Category.leisure: Icons.theater_comedy_sharp,
+  Category.work: Icons.work_outline,
 };
 
 class Expense {

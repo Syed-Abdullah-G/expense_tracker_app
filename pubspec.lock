@@ -604,10 +604,17 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
+<<<<<<< HEAD
       sha256: "79fbafed02cfdbe85ef3fd06c7f4bc2cbcba0177e61b765264853d4253b21744"
       url: "https://pub.dev"
     source: hosted
     version: "3.9.0"
+=======
+      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.8.0"
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
   pool:
     dependency: transitive
     description:
@@ -729,26 +736,47 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
+<<<<<<< HEAD
       sha256: "708425f534ef04253334763c8b75acc79eaec2d9b325bcd862575ea0a2207d87"
       url: "https://pub.dev"
     source: hosted
     version: "25.1.41"
+=======
+      sha256: "8e19260d292ed77e1cbd4ee1baafb3c9486079cad856e7891478131d25076039"
+      url: "https://pub.dev"
+    source: hosted
+    version: "25.1.40"
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
   syncfusion_flutter_xlsio:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_xlsio
+<<<<<<< HEAD
       sha256: "79195234d64a8e6c1909a6ab14f9a9a7984966ee1ec6d988f493be850e498451"
       url: "https://pub.dev"
     source: hosted
     version: "25.1.41"
+=======
+      sha256: c7f3aa6b7a8e5b20c7cb41053970499bd78f5b2de2571d08aaf1a4344ef54673
+      url: "https://pub.dev"
+    source: hosted
+    version: "25.1.40"
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
   syncfusion_officecore:
     dependency: transitive
     description:
       name: syncfusion_officecore
+<<<<<<< HEAD
       sha256: deea7826d5a0e7c07e0d272c74d9f4a6f35dd8b2a4ab9dcd694f7f6cf632fb55
       url: "https://pub.dev"
     source: hosted
     version: "25.1.41"
+=======
+      sha256: "342fbcc10358d12d4e0fe12e57738dedd435662256bd4ac671991509727341d4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "25.1.40"
+>>>>>>> 138d5c4ca224663b23d3062108565c002dbe8efb
   term_glyph:
     dependency: transitive
     description:

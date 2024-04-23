@@ -1,12 +1,14 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:simple_app/models/expense.dart';
 import 'package:simple_app/widgets/chart/chart_bar.dart';
 
-
 class Chart extends StatelessWidget {
-  const Chart({super.key, required this.expenses});
+  const Chart({super.key, required this.expenses,required this.registeredExpenses});
 
   final List<Expense> expenses;
+   final List<Expense> registeredExpenses;
+
 
   List<ExpenseBucket> get buckets {
     return [
@@ -16,6 +18,8 @@ class Chart extends StatelessWidget {
       ExpenseBucket.forCategory(expenses, Category.work),
     ];
   }
+
+
 
   double get maxTotalExpense {
     double maxTotalExpense = 0;
@@ -58,11 +62,13 @@ class Chart extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                for (final bucket in buckets) // alternative to map()
+                for (final bucket in buckets)
                   ChartBar(
                     fill: bucket.totalExpenses == 0
                         ? 0
-                        : bucket.totalExpenses / maxTotalExpense, amount: bucket.totalExpenses.toStringAsFixed(2),
+                        : bucket.totalExpenses / maxTotalExpense,
+                    amount: bucket.totalExpenses.toStringAsFixed(2),
+                    registeredExpenses: registeredExpenses,
                   )
               ],
             ),
