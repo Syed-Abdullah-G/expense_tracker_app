@@ -14,6 +14,8 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 void main() async {
+  await Hive.initFlutter();
+  var box = await Hive.openBox('aaa');
   runApp(
     MaterialApp(
       darkTheme: ThemeData.dark().copyWith(

@@ -24,20 +24,10 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
+  var box = Hive.box('aaa');
   String _externalStorageDirectory = "";
   final formatter = DateFormat('dd/MM/yyyy');
-  final List<Expense> _registeredExpenses = [
-    Expense(
-        title: 'Gym Membership',
-        amount: 50.99,
-        date: DateTime.now(),
-        category: model.Category.Bills),
-    Expense(
-        title: 'Cinemas',
-        amount: 10.00,
-        date: DateTime.now(),
-        category: model.Category.leisure)
-  ];
+  final List<Expense> _registeredExpenses = [];
 
   Future<void> _getExternalStorageDirectory() async {
     try {
@@ -131,6 +121,7 @@ class _ExpensesState extends State<Expenses> {
   void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
+      box.put('content', _registeredExpenses);
     });
   }
 
@@ -138,6 +129,7 @@ class _ExpensesState extends State<Expenses> {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
+      box.put('content', _registeredExpenses);
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -146,10 +138,23 @@ class _ExpensesState extends State<Expenses> {
             onPressed: () {
               setState(() {
                 _registeredExpenses.insert(expenseIndex, expense);
+                box.put('content', _registeredExpenses);
               });
             }),
         duration: Duration(seconds: 3),
         content: Text('Expense Deleted')));
+  }
+
+  _getExpenseFromBox() async {
+    _registeredExpenses.addAll(box.get('content') ?? []);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getExternalStorageDirectory();
+    _getExpenseFromBox();
   }
 
   @override
