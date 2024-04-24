@@ -9,8 +9,8 @@ import 'package:flutter/material.dart' as flutter;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:simple_app/data/database.dart';
 import 'package:simple_app/widgets/expenses_list/expenses_list.dart';
+import 'package:simple_app/models/expense.dart';
 import 'package:simple_app/models/expense.dart' as model;
 import 'package:simple_app/widgets/new_expense.dart';
 import 'package:simple_app/widgets/chart/chart.dart';
@@ -24,28 +24,20 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  String _externalStorageDirectory = '';
-
-  // reference the hive box
-
-  var _myBox = Hive.box('expensebox');
-  ExpenseDatabase db = ExpenseDatabase();
-
+  String _externalStorageDirectory = "";
   final formatter = DateFormat('dd/MM/yyyy');
-
-  @override
-  void initState() {
-    // if this is the 1st time
-    if (_myBox.get('expenses') == null) {
-      db.createInitialData();
-    } else {
-      // there already exists data
-      db.loadData();
-    }
-    // TODO: implement initState
-    super.initState();
-    _getExternalStorageDirectory();
-  }
+  final List<Expense> _registeredExpenses = [
+    Expense(
+        title: 'Gym Membership',
+        amount: 50.99,
+        date: DateTime.now(),
+        category: model.Category.Bills),
+    Expense(
+        title: 'Cinemas',
+        amount: 10.00,
+        date: DateTime.now(),
+        category: model.Category.leisure)
+  ];
 
   Future<void> _getExternalStorageDirectory() async {
     try {
@@ -82,8 +74,8 @@ class _ExpensesState extends State<Expenses> {
         sheet.getRangeByName('D1').setText('Category');
         //writing data
 
-        for (int i = 0; i < db.registeredExpenses.length; i++) {
-          model.Expense expense = db.registeredExpenses[i];
+        for (int i = 0; i < _registeredExpenses.length; i++) {
+          model.Expense expense = _registeredExpenses[i];
           sheet.getRangeByIndex(i + 2, 1).setText(expense.title);
           sheet.getRangeByIndex(i + 2, 2).setNumber(expense.amount);
           sheet.getRangeByIndex(i + 2, 3).setDateTime(expense.date);
@@ -136,17 +128,16 @@ class _ExpensesState extends State<Expenses> {
         builder: (ctx) => NewExpense(onAddExpense: _addExpense));
   }
 
-  void _addExpense(model.Expense expense) {
+  void _addExpense(Expense expense) {
     setState(() {
-      db.registeredExpenses.add(expense);
+      _registeredExpenses.add(expense);
     });
-    db.updateDatabase();
   }
 
-  void _removeExpense(model.Expense expense) {
-    final expenseIndex = db.registeredExpenses.indexOf(expense);
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
-      db.registeredExpenses.remove(expense);
+      _registeredExpenses.remove(expense);
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -154,16 +145,11 @@ class _ExpensesState extends State<Expenses> {
             label: 'Undo',
             onPressed: () {
               setState(() {
-                db.registeredExpenses.insert(expenseIndex, expense);
+                _registeredExpenses.insert(expenseIndex, expense);
               });
             }),
         duration: Duration(seconds: 3),
         content: Text('Expense Deleted')));
-    db.updateDatabase();
-  }
-
-  void showdb() {
-    print(_myBox.values);
   }
 
   @override
@@ -171,37 +157,36 @@ class _ExpensesState extends State<Expenses> {
     Widget mainContent =
         Center(child: Text('No expenses found. Start adding some'));
 
-    if (db.registeredExpenses.isNotEmpty) {
+    if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
-          expenses: db.registeredExpenses, onRemoveExpense: _removeExpense);
+          expenses: _registeredExpenses, onRemoveExpense: _removeExpense);
     }
     return Scaffold(
       appBar: AppBar(
         title: Text('Expense Tracker'),
         actions: [
-          OutlinedButton(
-            onPressed: createExcel,
-            child: Text(
-              'Save as Excel',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-            ),
+          IconButton(
+            onPressed: _openAddExpenseOverlay,
+            icon: Icon(Icons.add),
           ),
-          OutlinedButton(onPressed: showdb, child: Icon(Icons.add))
+          OutlinedButton(
+              onPressed: createExcel,
+              child: Text(
+                'Save as Excel',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ))
         ],
       ),
       body: flutter.Column(
         children: [
           Chart(
-            expenses: db.registeredExpenses,
-            registeredExpenses: db.registeredExpenses,
-          ),
+              expenses: _registeredExpenses,
+              registeredExpenses: _registeredExpenses),
           Expanded(child: mainContent),
+          FloatingActionButton(
+              onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openAddExpenseOverlay,
-        child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

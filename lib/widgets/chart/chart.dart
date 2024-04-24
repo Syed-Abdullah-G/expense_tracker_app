@@ -4,11 +4,11 @@ import 'package:simple_app/models/expense.dart';
 import 'package:simple_app/widgets/chart/chart_bar.dart';
 
 class Chart extends StatelessWidget {
-  const Chart({super.key, required this.expenses,required this.registeredExpenses});
+  const Chart(
+      {super.key, required this.expenses, required this.registeredExpenses});
 
   final List<Expense> expenses;
-   final List<Expense> registeredExpenses;
-
+  final List<Expense> registeredExpenses;
 
   List<ExpenseBucket> get buckets {
     return [
@@ -18,8 +18,6 @@ class Chart extends StatelessWidget {
       ExpenseBucket.forCategory(expenses, Category.work),
     ];
   }
-
-
 
   double get maxTotalExpense {
     double maxTotalExpense = 0;
@@ -62,7 +60,7 @@ class Chart extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                for (final bucket in buckets)
+                for (final bucket in buckets) // alternative to map()
                   ChartBar(
                     fill: bucket.totalExpenses == 0
                         ? 0

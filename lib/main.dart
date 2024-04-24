@@ -14,14 +14,6 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 );
 
 void main() async {
-  //init the hive
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter('expensetrackerapp');
-
-  // open a box
-
-  var box = await Hive.openBox('expensebox');
-
   runApp(
     MaterialApp(
       darkTheme: ThemeData.dark().copyWith(
