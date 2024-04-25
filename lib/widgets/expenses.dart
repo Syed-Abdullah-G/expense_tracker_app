@@ -9,6 +9,7 @@ import 'package:flutter/material.dart' as flutter;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:simple_app/main.dart';
 import 'package:simple_app/widgets/expenses_list/expenses_list.dart';
 import 'package:simple_app/models/expense.dart';
 import 'package:simple_app/models/expense.dart' as model;
@@ -24,10 +25,10 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  var box = Hive.box('aaa');
+  final box = Hive.box('aaa');
   String _externalStorageDirectory = "";
   final formatter = DateFormat('dd/MM/yyyy');
-  final List<Expense> _registeredExpenses = [];
+  List<Expense> _registeredExpenses = [];
 
   Future<void> _getExternalStorageDirectory() async {
     try {
@@ -146,7 +147,9 @@ class _ExpensesState extends State<Expenses> {
   }
 
   _getExpenseFromBox() async {
-    _registeredExpenses.addAll(box.get('content') ?? []);
+    setState(() {
+      _registeredExpenses = getList();
+    });
   }
 
   @override
@@ -159,6 +162,9 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    saveList(_registeredExpenses);
+    List<Expense> retrievedItems = getList();
+    print(retrievedItems);
     Widget mainContent =
         Center(child: Text('No expenses found. Start adding some'));
 
