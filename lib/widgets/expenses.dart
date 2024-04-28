@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(onAddExpense: _addExpense));
@@ -162,6 +164,7 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     saveList(_registeredExpenses);
     List<Expense> retrievedItems = getList();
     print(retrievedItems);
@@ -189,16 +192,27 @@ class _ExpensesState extends State<Expenses> {
               ))
         ],
       ),
-      body: flutter.Column(
-        children: [
-          Chart(
-              expenses: _registeredExpenses,
-              registeredExpenses: _registeredExpenses),
-          Expanded(child: mainContent),
-          FloatingActionButton(
-              onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
-        ],
-      ),
+      body: width < 600
+          ? flutter.Column(
+              children: [
+                Chart(
+                    expenses: _registeredExpenses,
+                    registeredExpenses: _registeredExpenses),
+                Expanded(child: mainContent),
+                FloatingActionButton(
+                    onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
+              ],
+            )
+          : flutter.Row(
+              children: [
+                Expanded(
+                  child: Chart(
+                      expenses: _registeredExpenses,
+                      registeredExpenses: _registeredExpenses),
+                ),
+                Expanded(child: mainContent)
+              ],
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
