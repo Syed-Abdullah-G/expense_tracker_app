@@ -192,27 +192,19 @@ class _ExpensesState extends State<Expenses> {
               ))
         ],
       ),
-      body: width < 600
-          ? flutter.Column(
-              children: [
-                Chart(
-                    expenses: _registeredExpenses,
-                    registeredExpenses: _registeredExpenses),
-                Expanded(child: mainContent),
-                FloatingActionButton(
-                    onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
-              ],
-            )
-          : flutter.Row(
-              children: [
-                Expanded(
-                  child: Chart(
-                      expenses: _registeredExpenses,
-                      registeredExpenses: _registeredExpenses),
-                ),
-                Expanded(child: mainContent)
-              ],
-            ),
+      body: flutter.Column(
+        children: [
+          Chart(
+              expenses: _registeredExpenses,
+              registeredExpenses: _registeredExpenses),
+          Expanded(child: mainContent),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: FloatingActionButton(
+                onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
+          ),
+        ],
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
