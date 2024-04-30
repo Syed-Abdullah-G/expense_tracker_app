@@ -44,7 +44,7 @@ class _ExpensesState extends State<Expenses> {
     }
   }
 
-  final _storagePermission = Permission.storage;
+  final _storagePermission = Permission.manageExternalStorage;
 
   Future<void> createExcel() async {
     if (Platform.isAndroid) {
