@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart' as flutter;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:simple_app/main.dart';
 import 'package:simple_app/widgets/expenses_list/expenses_list.dart';
 import 'package:simple_app/models/expense.dart';
 import 'package:simple_app/models/expense.dart' as model;
@@ -24,20 +26,10 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
+  final box = Hive.box('aaa');
   String _externalStorageDirectory = "";
   final formatter = DateFormat('dd/MM/yyyy');
-  final List<Expense> _registeredExpenses = [
-    Expense(
-        title: 'Gym Membership',
-        amount: 50.99,
-        date: DateTime.now(),
-        category: model.Category.Bills),
-    Expense(
-        title: 'Cinemas',
-        amount: 10.00,
-        date: DateTime.now(),
-        category: model.Category.leisure)
-  ];
+  List<Expense> _registeredExpenses = [];
 
   Future<void> _getExternalStorageDirectory() async {
     try {
@@ -52,7 +44,7 @@ class _ExpensesState extends State<Expenses> {
     }
   }
 
-  final _storagePermission = Permission.storage;
+  final _storagePermission = Permission.manageExternalStorage;
 
   Future<void> createExcel() async {
     if (Platform.isAndroid) {
@@ -123,6 +115,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(onAddExpense: _addExpense));
@@ -131,6 +124,7 @@ class _ExpensesState extends State<Expenses> {
   void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
+      box.put('content', _registeredExpenses);
     });
   }
 
@@ -138,6 +132,7 @@ class _ExpensesState extends State<Expenses> {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
+      box.put('content', _registeredExpenses);
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -146,14 +141,33 @@ class _ExpensesState extends State<Expenses> {
             onPressed: () {
               setState(() {
                 _registeredExpenses.insert(expenseIndex, expense);
+                box.put('content', _registeredExpenses);
               });
             }),
         duration: Duration(seconds: 3),
         content: Text('Expense Deleted')));
   }
 
+  _getExpenseFromBox() async {
+    setState(() {
+      _registeredExpenses = getList();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getExternalStorageDirectory();
+    _getExpenseFromBox();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    saveList(_registeredExpenses);
+    List<Expense> retrievedItems = getList();
+    print(retrievedItems);
     Widget mainContent =
         Center(child: Text('No expenses found. Start adding some'));
 
@@ -184,8 +198,11 @@ class _ExpensesState extends State<Expenses> {
               expenses: _registeredExpenses,
               registeredExpenses: _registeredExpenses),
           Expanded(child: mainContent),
-          FloatingActionButton(
-              onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: FloatingActionButton(
+                onPressed: _openAddExpenseOverlay, child: Icon(Icons.add)),
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
