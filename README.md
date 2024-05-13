@@ -28,7 +28,14 @@ This Flutter application provides users with a convenient way to track their exp
 
 **Screenshots:**
 
-[Insert screenshots of the app interface/dashboard here]
+![Dashboard screenshot](https://github.com/Syed-Abdullah-G/expense_tracker_app/blob/main/WhatsApp%20Image%202024-05-13%20at%208.38.47%20PM.jpeg?raw=true)
+
+![Dashboard screenshot](https://github.com/Syed-Abdullah-G/expense_tracker_app/blob/main/WhatsApp%20Image%202024-05-13%20at%208.38.48%20PM(1).jpeg?raw=true)
+
+![Dashboard screenshot](https://github.com/Syed-Abdullah-G/expense_tracker_app/blob/main/WhatsApp%20Image%202024-05-13%20at%208.38.49%20PM(1).jpeg?raw=true)
+
+![Dashboard screenshot](https://github.com/Syed-Abdullah-G/expense_tracker_app/blob/main/WhatsApp%20Image%202024-05-13%20at%208.38.49%20PM.jpeg?raw=true)
+
 
 **Contributing:**
 
